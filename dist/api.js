@@ -61,11 +61,11 @@ var API = /** @class */ (function () {
      */
     API.prototype._curl = function (command, options) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, time, parse, encode, _b, method, curlString;
+            var _a, _b, parse, _c, method, _d, time, curlString;
             var _this = this;
-            return __generator(this, function (_c) {
-                _a = options || {}, time = _a.time, parse = _a.parse, encode = _a.encode, _b = _a.method, method = _b === void 0 ? "GET" : _b;
-                curlString = "curl -X " + method + " --user \"" + this.user + ":" + this.password + "\" -H \"Exec: " + command + "\" -H \"Encode: " + (this.encode ? "Yes" : "No") + "\" " + (time ? "Time: " + time : "") + " " + (parse ? "Parse: " + parse : "") + " --head " + this.url;
+            return __generator(this, function (_e) {
+                _a = options || {}, _b = _a.parse, parse = _b === void 0 ? "parse" : _b, _c = _a.method, method = _c === void 0 ? "GET" : _c, _d = _a.time, time = _d === void 0 ? 0 : _d;
+                curlString = "curl -X " + method + " --user \"" + this.user + ":" + this.password + "\" -H \"Exec: " + command + "\" -H \"Encode: " + (this.encode ? "Yes" : "No") + "\" -H \"Time: " + time + "\" -H \"Parse " + parse + "\" --head " + this.url;
                 if (this.cache.has(curlString)) {
                     return [2 /*return*/, this.cache.get(curlString)];
                 }
