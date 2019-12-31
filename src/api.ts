@@ -59,12 +59,12 @@ export default class API {
     command: string,
     options?: curlOptions
   ): Promise<curlResponse> {
-    const { time, parse, encode, method = "GET" } = options || {};
+    const { parse = "parse", method = "GET", time = 0 } = options || {};
     const curlString = `curl -X ${method} --user "${this.user}:${
       this.password
-    }" -H "Exec: ${command}" -H "Encode: ${this.encode ? "Yes" : "No"}" ${
-      time ? "Time: " + time : ""
-    } ${parse ? "Parse: " + parse : ""} --head ${this.url}`;
+    }" -H "Exec: ${command}" -H "Encode: ${
+      this.encode ? "Yes" : "No"
+    }" -H "Time: ${time}" -H "Parse ${parse}" --head ${this.url}`;
 
     if (this.cache.has(curlString)) {
       return this.cache.get(curlString);
