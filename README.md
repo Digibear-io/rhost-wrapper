@@ -2,19 +2,25 @@
 
 A Cached wrapper for the RHostMush HTTP API.
 
-## `Install`
+## Install
 
 `npm i @digibear/rhost-wrapper`
 
-## `Usage`
+## Usage
 
 ```js
 const API = require("@digibear/rhost-wrapper");
+
 const api = new API({
-  user: process.env.USER,
-  password: process.env.PASSWORD
+  user:"#123",
+  password:"xxxxxxxxxx",
+  port: 2222,
+  encode: true // On by default to fix an stunnel bug.
 });
 ```
+## API
+* `get(command: string)` .get allows you to send commands to the game, and recieve feedback through the API connection.
+* `post(command: string)` .post allows you to affect the game by sending commands.  Any command sent `@emit` for example, will be evaluated by the API object and issued to the game.
 
 `Traditional Promises`
 
@@ -45,6 +51,12 @@ const async getWHO = () => {
 getWHO().catch(err => console.error(err))
 
 ```
+
+
+### Todo List:
+* API support for conditional get/post headers.
+* Make the cache timing configurable.  Right now it has a 2 sec TTL.
+
 
 For help setting up your Rhost API object, see `wizhelp api` and `wizhelp @api`.
 

@@ -10,6 +10,8 @@
   ],
   "author": "Lemuel Canady, Jr",
   "license": "MIT",
+  "homepage": "https://github.com/digibear-io/rhost-wrapper#README",
+  "repository": "github:digibear-io/rhost-wrapper",
   "dependencies": {},
   "devDependencies": {
     "@types/node": "^13.1.1",

@@ -64,7 +64,7 @@ export default class API {
       this.password
     }" -H "Exec: ${command}" -H "Encode: ${
       this.encode ? "Yes" : "No"
-    }" -H "Time: ${time}" -H "Parse ${parse}" --head ${this.url}`;
+    }" -H "Time: ${time}" -H "Parse: ${parse}" --head ${this.url}`;
 
     if (this.cache.has(curlString)) {
       return this.cache.get(curlString);
@@ -85,7 +85,7 @@ export default class API {
           });
 
           this.cache.set(curlString, {
-            ttl: 10000,
+            ttl: 2000,
             payload: {
               status: RegexStatus ? RegexStatus[1] : "",
               ok: RegexStatus![1] === "200" ? true : false,

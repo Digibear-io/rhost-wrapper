@@ -65,7 +65,7 @@ var API = /** @class */ (function () {
             var _this = this;
             return __generator(this, function (_e) {
                 _a = options || {}, _b = _a.parse, parse = _b === void 0 ? "parse" : _b, _c = _a.method, method = _c === void 0 ? "GET" : _c, _d = _a.time, time = _d === void 0 ? 0 : _d;
-                curlString = "curl -X " + method + " --user \"" + this.user + ":" + this.password + "\" -H \"Exec: " + command + "\" -H \"Encode: " + (this.encode ? "Yes" : "No") + "\" -H \"Time: " + time + "\" -H \"Parse " + parse + "\" --head " + this.url;
+                curlString = "curl -X " + method + " --user \"" + this.user + ":" + this.password + "\" -H \"Exec: " + command + "\" -H \"Encode: " + (this.encode ? "Yes" : "No") + "\" -H \"Time: " + time + "\" -H \"Parse: " + parse + "\" --head " + this.url;
                 if (this.cache.has(curlString)) {
                     return [2 /*return*/, this.cache.get(curlString)];
                 }
@@ -84,7 +84,7 @@ var API = /** @class */ (function () {
                                     data: RegexReturn ? RegexReturn[1] : ""
                                 });
                                 _this.cache.set(curlString, {
-                                    ttl: 10000,
+                                    ttl: 2000,
                                     payload: {
                                         status: RegexStatus ? RegexStatus[1] : "",
                                         ok: RegexStatus[1] === "200" ? true : false,
