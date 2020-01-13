@@ -4,10 +4,12 @@ import cache, { CurlCache } from "./cache";
 // load the .env file
 
 export interface curlOptions {
-  method?: string;
-  time?: string;
-  parse?: string;
-  encode?: string;
+  method?: "GET" | "POST";
+  time?: number;
+  parse?: "parse" | "noparse" | "anisparse" | "ansinoparse" | "ansionly";
+  encode?: "yes" | "no";
+  ttl?: number;
+  cacheCheck?: number;
 }
 
 export interface curlResponse {
@@ -53,7 +55,7 @@ export default class API {
    * @param options The settings passed to the fetch call.
    * @param options.time (POST) The time to queue the action before
    * it's handled.
-   * @param options.method
+   * @param options.method Either `Post`, or `Get`.
    */
   private async _curl(
     command: string,
@@ -69,10 +71,17 @@ export default class API {
     if (this.cache.has(curlString)) {
       return this.cache.get(curlString);
     } else {
+      // If the cache fails to respond after 20 seconds, cancel
+      // the request and return with a Promise.Reject.
+      const timeout = setTimeout(() => {
+        return Promise.reject({ message: "Curl Operation timeout" });
+      }, 20000);
+
       return new Promise((resolve, reject) => {
         exec(curlString, (error, stdout) => {
           if (error) reject(error);
 
+          clearTimeout(timeout);
           const RegexStatus = stdout.match(/HTTP\/1.1\s(\d+)/);
           const RegexExec = stdout.match(/Exec:\s(.*)/);
           const RegexReturn = stdout.match(/Return:\s(.*)/);
@@ -101,9 +110,10 @@ export default class API {
   /**
    * make a get request from the Rhost HTTP API
    * @param command The command to be passed to the server.
+   * @param options Additional options to be setnt over the API.
    */
-  async get(command: string): Promise<curlResponse> {
-    const results = await this._curl(command);
+  async get(command: string, options: curlOptions): Promise<curlResponse> {
+    const results = await this._curl(command, options);
 
     if (!results.ok) throw new Error(results.message);
     return results;
@@ -113,8 +123,9 @@ export default class API {
    * make a get request from the Rhost HTTP API
    * @param command The command to be passed to the server.
    */
-  async post(command: string): Promise<curlResponse> {
-    const results = await this._curl(command, { method: "POST" });
+  async post(command: string, options: curlOptions): Promise<curlResponse> {
+    options.method = "POST";
+    const results = await this._curl(command, options);
 
     if (!results.ok) throw new Error(results.message);
     return results;

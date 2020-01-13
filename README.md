@@ -1,6 +1,10 @@
 # @digibear/rhost-wrapper
 
-A Cached wrapper for the RHostMush HTTP API.
+A Cached wrapper for the RHostMush HTTP API, and a curl operation to use it's Header only schema.
+
+## License
+
+`MIT`
 
 ## Install
 
@@ -12,15 +16,37 @@ A Cached wrapper for the RHostMush HTTP API.
 const API = require("@digibear/rhost-wrapper");
 
 const api = new API({
-  user:"#123",
-  password:"xxxxxxxxxx",
+  user: "#123",
+  password: "xxxxxxxxxx",
   port: 2222,
   encode: true // On by default to fix an stunnel bug.
 });
 ```
+
 ## API
-* `get(command: string)` .get allows you to send commands to the game, and recieve feedback through the API connection.
-* `post(command: string)` .post allows you to affect the game by sending commands.  Any command sent `@emit` for example, will be evaluated by the API object and issued to the game.
+
+- `get(command: string [, options: curlOptions])` .get allows you to send commands to the game, and recieve feedback through the API connection.
+- `post(command: string [, options: curlOptions])` .post allows you to affect the game by sending commands. Any command sent `@emit` for example, will be evaluated by the API object and issued to the game.
+
+### Options
+
+- GET
+  - `Exec`
+    - string
+  - `Parse`
+    - parse
+    - noparse
+    - ansiparse
+    - ansinoparse
+    - ansionly
+  - `Encode`
+    - yes
+    - no
+- PUT
+  - `Exec`
+    - string
+  - `time`
+    - number
 
 `Traditional Promises`
 
@@ -52,11 +78,11 @@ getWHO().catch(err => console.error(err))
 
 ```
 
-
 ### Todo List:
-* API support for conditional get/post headers.
-* Make the cache timing configurable.  Right now it has a 2 sec TTL.
 
+- ~API support for conditional get post headers.~
+- ~Setting a default timeout to the curl request.~
+- Make the cache timing configurable. Right now it has a 2 sec TTL.
 
 For help setting up your Rhost API object, see `wizhelp api` and `wizhelp @api`.
 

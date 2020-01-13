@@ -57,11 +57,11 @@ var API = /** @class */ (function () {
      * @param options The settings passed to the fetch call.
      * @param options.time (POST) The time to queue the action before
      * it's handled.
-     * @param options.method
+     * @param options.method Either `Post`, or `Get`.
      */
     API.prototype._curl = function (command, options) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, _b, parse, _c, method, _d, time, curlString;
+            var _a, _b, parse, _c, method, _d, time, curlString, timeout_1;
             var _this = this;
             return __generator(this, function (_e) {
                 _a = options || {}, _b = _a.parse, parse = _b === void 0 ? "parse" : _b, _c = _a.method, method = _c === void 0 ? "GET" : _c, _d = _a.time, time = _d === void 0 ? 0 : _d;
@@ -70,10 +70,14 @@ var API = /** @class */ (function () {
                     return [2 /*return*/, this.cache.get(curlString)];
                 }
                 else {
+                    timeout_1 = setTimeout(function () {
+                        return Promise.reject({ message: "Curl Operation timeout" });
+                    }, 20000);
                     return [2 /*return*/, new Promise(function (resolve, reject) {
                             child_process_1.exec(curlString, function (error, stdout) {
                                 if (error)
                                     reject(error);
+                                clearTimeout(timeout_1);
                                 var RegexStatus = stdout.match(/HTTP\/1.1\s(\d+)/);
                                 var RegexExec = stdout.match(/Exec:\s(.*)/);
                                 var RegexReturn = stdout.match(/Return:\s(.*)/);
@@ -102,13 +106,14 @@ var API = /** @class */ (function () {
     /**
      * make a get request from the Rhost HTTP API
      * @param command The command to be passed to the server.
+     * @param options Additional options to be setnt over the API.
      */
-    API.prototype.get = function (command) {
+    API.prototype.get = function (command, options) {
         return __awaiter(this, void 0, void 0, function () {
             var results;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this._curl(command)];
+                    case 0: return [4 /*yield*/, this._curl(command, options)];
                     case 1:
                         results = _a.sent();
                         if (!results.ok)
@@ -122,12 +127,14 @@ var API = /** @class */ (function () {
      * make a get request from the Rhost HTTP API
      * @param command The command to be passed to the server.
      */
-    API.prototype.post = function (command) {
+    API.prototype.post = function (command, options) {
         return __awaiter(this, void 0, void 0, function () {
             var results;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this._curl(command, { method: "POST" })];
+                    case 0:
+                        options.method = "POST";
+                        return [4 /*yield*/, this._curl(command, options)];
                     case 1:
                         results = _a.sent();
                         if (!results.ok)
