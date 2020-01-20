@@ -35,7 +35,7 @@ var CurlCache = /** @class */ (function () {
         }, this._ttlCheck);
     }
     CurlCache.prototype.set = function (key, value, ttl) {
-        if (ttl === void 0) { ttl = 10000; }
+        if (ttl === void 0) { ttl = 2000; }
         var time = new Date();
         var entry = __assign(__assign({}, value), { ms: time.getTime() + ttl });
         this._cache.set(key, entry);

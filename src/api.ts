@@ -71,7 +71,7 @@ export default class API {
     if (this.cache.has(curlString)) {
       return this.cache.get(curlString);
     } else {
-      // If the cache fails to respond after 20 seconds, cancel
+      // If the curl operation fails to respond after 20 seconds, cancel
       // the request and return with a Promise.Reject.
       const timeout = setTimeout(() => {
         return Promise.reject({ message: "Curl Operation timeout" });

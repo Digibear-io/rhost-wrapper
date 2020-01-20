@@ -1,2 +1,1 @@
-const api = require("./api").default;
-module.exports = api;
+module.exports = require("./api").default;
