@@ -2,7 +2,7 @@
   "name": "@digibear/rhost-wrapper",
   "version": "1.0.0",
   "description": "A Promise based, cached wrapper for the RhostMush HTTP API",
-  "main": "./dist/index.js",
+  "main": "./dist/api.js",
   "scripts": {
     "build": "npx tsc -p ./src/tsconfig.json"
   },
