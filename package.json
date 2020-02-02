@@ -4,7 +4,7 @@
   "description": "A Promise based, cached wrapper for the RhostMush HTTP API",
   "main": "./dist/api.js",
   "types": "./dist/api.js",
-  "files": ["dist/**/*.js", "dist/**/*.d.ts"]
+  "files": ["dist/**/*.js", "dist/**/*.d.ts"],
   "scripts": {
     "build": "npx tsc -p ./src/tsconfig.json"
   },
