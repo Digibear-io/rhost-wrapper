@@ -3,6 +3,7 @@
   "version": "1.0.1",
   "description": "A Promise based, cached wrapper for the RhostMush HTTP API",
   "main": "./dist/api.js",
+  "types": "./dist/api.js",
   "scripts": {
     "build": "npx tsc -p ./src/tsconfig.json"
   },
