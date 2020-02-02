@@ -1,5 +1,5 @@
 import { exec } from "child_process";
-import cache, { CurlCache } from "./cache";
+import { CurlCache } from "./cache";
 
 // load the .env file
 
@@ -25,7 +25,7 @@ export class API {
   private port: number;
   private address: string;
   private url: string;
-  private cache: CurlCache;
+  private cache: CurlCache | undefined;
   private encode: Boolean;
 
   constructor({
@@ -37,17 +37,20 @@ export class API {
   }: {
     user: string;
     password: string;
-    address: string;
-    port: number;
-    encode: Boolean;
+    address?: string;
+    port?: number;
+    encode?: Boolean;
   }) {
-    this.cache = cache;
     this.user = user || "";
     this.encode = encode;
     this.password = password || "";
     this.port = port;
     this.address = address;
     this.url = `http://${this.address}:${this.port}`;
+  }
+
+  async initCache() {
+    this.cache = (await import("./cache")).default;
   }
 
   /**
@@ -68,7 +71,7 @@ export class API {
       this.encode ? "Yes" : "No"
     }" -H "Time: ${time}" -H "Parse: ${parse}" --head ${this.url}`;
 
-    if (this.cache.has(curlString)) {
+    if (this.cache && this.cache.has(curlString)) {
       return this.cache.get(curlString);
     } else {
       // If the curl operation fails to respond after 20 seconds, cancel
@@ -88,20 +91,25 @@ export class API {
 
           resolve({
             status: RegexStatus ? RegexStatus[1] : "",
-            ok: RegexStatus![1] === "200" ? true : false,
-            message: RegexExec![1],
+            ok: RegexStatus ? (RegexStatus[1] === "200" ? true : false) : false,
+            message: RegexExec ? RegexExec[1] : "",
             data: RegexReturn ? RegexReturn[1] : ""
           });
-
-          this.cache.set(curlString, {
-            ttl: 2000,
-            payload: {
-              status: RegexStatus ? RegexStatus[1] : "",
-              ok: RegexStatus![1] === "200" ? true : false,
-              message: RegexExec![1],
-              data: RegexReturn ? RegexReturn[1] : ""
-            }
-          });
+          if (this.cache) {
+            this.cache.set(curlString, {
+              ttl: 2000,
+              payload: {
+                status: RegexStatus ? RegexStatus[1] : "",
+                ok: RegexStatus
+                  ? RegexStatus[1] === "200"
+                    ? true
+                    : false
+                  : false,
+                message: RegexExec![1],
+                data: RegexReturn ? RegexReturn[1] : ""
+              }
+            });
+          }
         });
       });
     }

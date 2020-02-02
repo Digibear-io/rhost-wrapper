@@ -35,16 +35,18 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var child_process_1 = require("child_process");
-var cache_1 = __importDefault(require("./cache"));
 var API = /** @class */ (function () {
     function API(_a) {
         var user = _a.user, password = _a.password, _b = _a.address, address = _b === void 0 ? "127.0.0.1" : _b, _c = _a.port, port = _c === void 0 ? 2222 : _c, _d = _a.encode, encode = _d === void 0 ? false : _d;
-        this.cache = cache_1.default;
         this.user = user || "";
         this.encode = encode;
         this.password = password || "";
@@ -52,6 +54,21 @@ var API = /** @class */ (function () {
         this.address = address;
         this.url = "http://" + this.address + ":" + this.port;
     }
+    API.prototype.initCache = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _a = this;
+                        return [4 /*yield*/, Promise.resolve().then(function () { return __importStar(require("./cache")); })];
+                    case 1:
+                        _a.cache = (_b.sent()).default;
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
     /**
      * Make an http call to the fetch api.
      * @param options The settings passed to the fetch call.
@@ -66,7 +83,7 @@ var API = /** @class */ (function () {
             return __generator(this, function (_e) {
                 _a = options || {}, _b = _a.parse, parse = _b === void 0 ? "parse" : _b, _c = _a.method, method = _c === void 0 ? "GET" : _c, _d = _a.time, time = _d === void 0 ? 0 : _d;
                 curlString = "curl -X " + method + " --user \"" + this.user + ":" + this.password + "\" -H \"Exec: " + command + "\" -H \"Encode: " + (this.encode ? "Yes" : "No") + "\" -H \"Time: " + time + "\" -H \"Parse: " + parse + "\" --head " + this.url;
-                if (this.cache.has(curlString)) {
+                if (this.cache && this.cache.has(curlString)) {
                     return [2 /*return*/, this.cache.get(curlString)];
                 }
                 else {
@@ -83,19 +100,25 @@ var API = /** @class */ (function () {
                                 var RegexReturn = stdout.match(/Return:\s(.*)/);
                                 resolve({
                                     status: RegexStatus ? RegexStatus[1] : "",
-                                    ok: RegexStatus[1] === "200" ? true : false,
-                                    message: RegexExec[1],
+                                    ok: RegexStatus ? (RegexStatus[1] === "200" ? true : false) : false,
+                                    message: RegexExec ? RegexExec[1] : "",
                                     data: RegexReturn ? RegexReturn[1] : ""
                                 });
-                                _this.cache.set(curlString, {
-                                    ttl: 2000,
-                                    payload: {
-                                        status: RegexStatus ? RegexStatus[1] : "",
-                                        ok: RegexStatus[1] === "200" ? true : false,
-                                        message: RegexExec[1],
-                                        data: RegexReturn ? RegexReturn[1] : ""
-                                    }
-                                });
+                                if (_this.cache) {
+                                    _this.cache.set(curlString, {
+                                        ttl: 2000,
+                                        payload: {
+                                            status: RegexStatus ? RegexStatus[1] : "",
+                                            ok: RegexStatus
+                                                ? RegexStatus[1] === "200"
+                                                    ? true
+                                                    : false
+                                                : false,
+                                            message: RegexExec[1],
+                                            data: RegexReturn ? RegexReturn[1] : ""
+                                        }
+                                    });
+                                }
                             });
                         })];
                 }

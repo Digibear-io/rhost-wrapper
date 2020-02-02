@@ -23,10 +23,11 @@ export declare class API {
     constructor({ user, password, address, port, encode }: {
         user: string;
         password: string;
-        address: string;
-        port: number;
-        encode: Boolean;
+        address?: string;
+        port?: number;
+        encode?: Boolean;
     });
+    initCache(): Promise<void>;
     /**
      * Make an http call to the fetch api.
      * @param options The settings passed to the fetch call.
