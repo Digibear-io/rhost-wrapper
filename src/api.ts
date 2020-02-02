@@ -19,7 +19,7 @@ export interface curlResponse {
   data: string;
 }
 
-export default class API {
+export class API {
   private user: string;
   private password: string;
   private port: number;
@@ -71,7 +71,7 @@ export default class API {
     if (this.cache.has(curlString)) {
       return this.cache.get(curlString);
     } else {
-      // If the cache fails to respond after 20 seconds, cancel
+      // If the curl operation fails to respond after 20 seconds, cancel
       // the request and return with a Promise.Reject.
       const timeout = setTimeout(() => {
         return Promise.reject({ message: "Curl Operation timeout" });
@@ -112,7 +112,7 @@ export default class API {
    * @param command The command to be passed to the server.
    * @param options Additional options to be setnt over the API.
    */
-  async get(command: string, options: curlOptions): Promise<curlResponse> {
+  async get(command: string, options: curlOptions = {}): Promise<curlResponse> {
     const results = await this._curl(command, options);
 
     if (!results.ok) throw new Error(results.message);
@@ -123,7 +123,10 @@ export default class API {
    * make a get request from the Rhost HTTP API
    * @param command The command to be passed to the server.
    */
-  async post(command: string, options: curlOptions): Promise<curlResponse> {
+  async post(
+    command: string,
+    options: curlOptions = {}
+  ): Promise<curlResponse> {
     options.method = "POST";
     const results = await this._curl(command, options);
 

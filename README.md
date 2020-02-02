@@ -32,7 +32,6 @@ const api = new API({
 
 - GET
   - `Exec`
-    - string
   - `Parse`
     - parse
     - noparse
@@ -44,7 +43,6 @@ const api = new API({
     - no
 - PUT
   - `Exec`
-    - string
   - `time`
     - number
 

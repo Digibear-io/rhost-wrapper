@@ -38,7 +38,7 @@ export class CurlCache {
     }, this._ttlCheck);
   }
 
-  set(key: string, value: CurlCacheEntry, ttl: number = 10000): curlResponse {
+  set(key: string, value: CurlCacheEntry, ttl: number = 2000): curlResponse {
     const time = new Date();
     const entry: CurlCacheStore = {
       ...value,

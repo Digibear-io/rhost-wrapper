@@ -109,6 +109,7 @@ var API = /** @class */ (function () {
      * @param options Additional options to be setnt over the API.
      */
     API.prototype.get = function (command, options) {
+        if (options === void 0) { options = {}; }
         return __awaiter(this, void 0, void 0, function () {
             var results;
             return __generator(this, function (_a) {
@@ -128,6 +129,7 @@ var API = /** @class */ (function () {
      * @param command The command to be passed to the server.
      */
     API.prototype.post = function (command, options) {
+        if (options === void 0) { options = {}; }
         return __awaiter(this, void 0, void 0, function () {
             var results;
             return __generator(this, function (_a) {
@@ -146,5 +148,5 @@ var API = /** @class */ (function () {
     };
     return API;
 }());
-exports.default = API;
+exports.API = API;
 //# sourceMappingURL=api.js.map
