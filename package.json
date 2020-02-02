@@ -1,6 +1,6 @@
 {
   "name": "@digibear/rhost-wrapper",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "A Promise based, cached wrapper for the RhostMush HTTP API",
   "main": "./dist/api.js",
   "types": "./dist/api.js",
