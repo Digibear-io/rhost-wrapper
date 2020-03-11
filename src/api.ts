@@ -23,10 +23,10 @@ export class API {
   private user: string;
   private password: string;
   private port: number;
-  private address: string;
-  private url: string;
-  private cache: CurlCache | undefined;
-  private encode: Boolean;
+  private address?: string;
+  private url?: string;
+  private cache?: CurlCache | undefined;
+  private encode?: Boolean;
 
   constructor({
     user,
