@@ -16,10 +16,10 @@ export declare class API {
     private user;
     private password;
     private port;
-    private address;
-    private url;
-    private cache;
-    private encode;
+    private address?;
+    private url?;
+    private cache?;
+    private encode?;
     constructor({ user, password, address, port, encode }: {
         user: string;
         password: string;

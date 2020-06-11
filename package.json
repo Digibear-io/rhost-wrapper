@@ -3,7 +3,6 @@
   "version": "1.2.1",
   "description": "A Promise based, cached wrapper for the RhostMush HTTP API",
   "main": "./dist/api.js",
-  "types": "./dist/api.js",
   "files": [
     "dist/**/*.js",
     "dist/**/*.d.ts"
@@ -21,7 +20,7 @@
   "repository": "github:digibear-io/rhost-wrapper",
   "dependencies": {},
   "devDependencies": {
-    "@types/node": "^13.1.1",
+    "@types/node": "^13.13.12",
     "dotenv": "^8.2.0",
     "ts-node": "^8.5.4",
     "typescript": "^3.7.4"

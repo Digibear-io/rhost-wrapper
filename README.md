@@ -13,7 +13,7 @@ A Cached wrapper for the RHostMush HTTP API, and a curl operation to use it's He
 ## Usage
 
 ```js
-const API = require("@digibear/rhost-wrapper");
+const { API } = require("@digibear/rhost-wrapper");
 
 const api = new API({
   user: "#123",
