@@ -66,6 +66,7 @@ class API {
                     user: this.user,
                     password: this.password,
                 },
+                flags: ["--head"],
             });
             const RegexStatus = stdout.match(/HTTP\/1.1\s(\d+)/);
             const RegexExec = stdout.match(/Exec:\s(.*)/);

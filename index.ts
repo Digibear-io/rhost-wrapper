@@ -6,6 +6,6 @@ const api = new API({
   port: 4204,
 });
 (async () => {
-  const res = await api.get("who");
+  const res = await api.post("@emit Foobar!");
   console.log(res);
 })();
