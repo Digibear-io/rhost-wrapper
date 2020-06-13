@@ -20,7 +20,7 @@ export declare class API {
     private url?;
     private cache?;
     private encode?;
-    constructor({ user, password, address, port, encode }: {
+    constructor({ user, password, address, port, encode, }: {
         user: string;
         password: string;
         address?: string;

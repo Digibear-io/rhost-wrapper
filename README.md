@@ -19,7 +19,7 @@ const api = new API({
   user: "#123",
   password: "xxxxxxxxxx",
   port: 2222,
-  encode: true // On by default to fix an stunnel bug.
+  encode: true, // On by default to fix an stunnel bug.
 });
 ```
 
@@ -51,14 +51,14 @@ const api = new API({
 ```js
 api
   .get("WHO")
-  .then(res => {
+  .then((res) => {
     if (res.ok) {
       console.log(res.data);
     } else {
       console.error(`API ERROR: ${res.message}`);
     }
   })
-  .catch(err => console.error(err));
+  .catch((err) => console.error(err));
 ```
 
 `Async/await`
@@ -79,9 +79,6 @@ getWHO().catch(err => console.error(err))
 ### Todo List:
 
 - ~API support for conditional get post headers.~
-- ~Setting a default timeout to the curl request.~
-- Make the cache timing configurable. Right now it has a 2 sec TTL.
-
-For help setting up your Rhost API object, see `wizhelp api` and `wizhelp @api`.
+  For help setting up your Rhost API object, see `wizhelp api` and `wizhelp @api`.
 
 Enjoy!

@@ -1,5 +1,6 @@
 import { exec } from "child_process";
 import { CurlCache } from "./cache";
+import { curl } from "@digibear/curl";
 
 // load the .env file
 
@@ -33,7 +34,7 @@ export class API {
     password,
     address = "127.0.0.1",
     port = 2222,
-    encode = false
+    encode = false,
   }: {
     user: string;
     password: string;
@@ -65,54 +66,32 @@ export class API {
     options?: curlOptions
   ): Promise<curlResponse> {
     const { parse = "parse", method = "GET", time = 0 } = options || {};
-    const curlString = `curl -X ${method} --user "${this.user}:${
-      this.password
-    }" -H "Exec: ${command}" -H "Encode: ${
-      this.encode ? "Yes" : "No"
-    }" -H "Time: ${time}" -H "Parse: ${parse}" --head ${this.url}`;
 
-    if (this.cache && this.cache.has(curlString)) {
-      return this.cache.get(curlString);
-    } else {
-      // If the curl operation fails to respond after 20 seconds, cancel
-      // the request and return with a Promise.Reject.
-      const timeout = setTimeout(() => {
-        return Promise.reject({ message: "Curl Operation timeout" });
-      }, 20000);
+    const stdout = await curl(this.url!, {
+      mode: method,
+      headers: {
+        Exec: command,
+        Encode: this.encode ? "Yes" : "No",
+        Time: time,
+        Parse: parse,
+      },
+      user: {
+        user: this.user,
+        password: this.password,
+      },
+      flags: ["--head"],
+    });
 
-      return new Promise((resolve, reject) => {
-        exec(curlString, (error, stdout) => {
-          if (error) reject(error);
+    const RegexStatus = stdout.match(/HTTP\/1.1\s(\d+)/);
+    const RegexExec = stdout.match(/Exec:\s(.*)/);
+    const RegexReturn = stdout.match(/Return:\s(.*)/);
 
-          clearTimeout(timeout);
-          const RegexStatus = stdout.match(/HTTP\/1.1\s(\d+)/);
-          const RegexExec = stdout.match(/Exec:\s(.*)/);
-          const RegexReturn = stdout.match(/Return:\s(.*)/);
-
-          resolve({
-            status: RegexStatus ? RegexStatus[1] : "",
-            ok: RegexStatus ? (RegexStatus[1] === "200" ? true : false) : false,
-            message: RegexExec ? RegexExec[1] : "",
-            data: RegexReturn ? RegexReturn[1] : ""
-          });
-          if (this.cache) {
-            this.cache.set(curlString, {
-              ttl: 2000,
-              payload: {
-                status: RegexStatus ? RegexStatus[1] : "",
-                ok: RegexStatus
-                  ? RegexStatus[1] === "200"
-                    ? true
-                    : false
-                  : false,
-                message: RegexExec![1],
-                data: RegexReturn ? RegexReturn[1] : ""
-              }
-            });
-          }
-        });
-      });
-    }
+    return {
+      status: RegexStatus ? RegexStatus[1] : "",
+      ok: RegexStatus ? (RegexStatus[1] === "200" ? true : false) : false,
+      message: RegexExec ? RegexExec[1] : "",
+      data: RegexReturn ? RegexReturn[1] : "",
+    };
   }
 
   /**
