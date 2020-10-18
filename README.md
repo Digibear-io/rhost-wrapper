@@ -1,6 +1,6 @@
 # @digibear/rhost-wrapper
 
-A Cached wrapper for the RHostMush HTTP API, and a curl operation to use it's Header only schema.
+A wrapper for the RHostMush HTTP API, and a curl operation to use it's Header only schema.
 
 ## License
 
